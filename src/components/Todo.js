@@ -7,7 +7,7 @@ import List from './List';
 
 
 const Todo = () => {
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState("")
     const [arr, setArr] = useState([])
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const Todo = () => {
 
         getData()
 
-    }, )
+    }, [])
 
     const setData = () => {
         // setArr([...arr, value])
@@ -53,16 +53,16 @@ const Todo = () => {
 
     }
 
-    
-    
   return (
     <>
     <Container>
     <Box>
         <h2>Todo List</h2>
         <Input>
+        <form >
         <input type="text" placeholder='enter todo'  value={value} onChange={(event) => setValue(event.target.value)}/>
-        <button disabled={!value} onClick={setData}>ADD</button>
+        <button type='submit' disabled={!value ? true : false} onClick={setData}>ADD</button>
+        </form>
         </Input>
 
         <Main>
@@ -107,10 +107,17 @@ padding: 20px;
 `
 
 const Input = styled.div`
-display: flex;
+/* display: flex;
 align-items: center;
-justify-content: space-between;
-margin-top: 10px;
+justify-content: space-between; */
+/* margin-top: 10px; */
+/* width: 100%; */
+form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
 
 input {
     flex-grow: 1;
@@ -125,6 +132,9 @@ button {
     outline: none;
     border: 1px solid lightgray;
     cursor: pointer;
+    color: ${(props) => (props.disabled ? "#000" : "#fff")};
+    background-color: ${(props) => (props.disabled ? "rgba(0,0,0,0.1)" : "#0a66c2")};
+    border: 1px solid #fff;
 
 }
 `
