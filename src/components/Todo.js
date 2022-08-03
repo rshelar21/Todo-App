@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
+
 import db from "../firebase"
-import {collection, addDoc, query, getDocs, serverTimestamp, orderBy} from "firebase/firestore"
+import {collection, addDoc, query,doc, getDocs, serverTimestamp, orderBy, deleteDoc} from "firebase/firestore"
+import List from './List';
 
 
 const Todo = () => {
@@ -9,36 +11,50 @@ const Todo = () => {
     const [arr, setArr] = useState([])
 
     useEffect(() => {
-        let payload = []
+        
 
         const getData = async () => {
+            // let payload = []
             const dataRef =  collection(db, "todos")
             const q = query(dataRef, orderBy("timestamp"));
             const querySnapshot = await getDocs(q)
-            querySnapshot.forEach((doc) => {
-            console.log(doc.data())
-            payload = [...payload, doc.data().todo]
-            setArr(payload)
-            
+            console.log(querySnapshot.docs)
+            setArr(querySnapshot.docs.map((doc) => ({...doc.data() , id: doc.id})))
+        //     querySnapshot.forEach((doc) => {
+        //     console.log(doc.data())
+        //     payload.push({id: doc.id, todo: doc.data().todo}) 
            
-        })
+        // })
+        // setArr(payload)
+
         }
 
         getData()
 
-    })
+    }, )
 
     const setData = () => {
-        setArr([...arr, value])
+        // setArr([...arr, value])
         const docRef = addDoc(collection(db, "todos"), {
             todo: value,
             timestamp : serverTimestamp(),
         })
         setValue('')
-        console.log("id" , docRef.id)
+        // console.log("id" , docRef.id)
 
     }
+
+   
     console.log(arr)
+
+    const delList = async (data) => {
+        await deleteDoc(doc(db, "todos", data))
+        
+
+    }
+
+    
+    
   return (
     <>
     <Container>
@@ -51,10 +67,10 @@ const Todo = () => {
 
         <Main>
         <ul>
-            {
+            { 
                 arr.map((item , index) => {
                     return(
-                        <li key={index}>{item}</li>
+                        <List key={index} text={item}  show={delList}/>
                     )
                 })
             }
@@ -108,6 +124,7 @@ button {
     border: none;
     outline: none;
     border: 1px solid lightgray;
+    cursor: pointer;
 
 }
 `
@@ -123,6 +140,17 @@ ul {
 }
 li {
     padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+
+    .icons {
+        background: red;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+    }
 }
 `
 
