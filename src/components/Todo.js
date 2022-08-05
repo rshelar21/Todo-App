@@ -31,7 +31,7 @@ const Todo = () => {
 
         getData()
 
-    }, [])
+    })
 
     const setData = () => {
         // setArr([...arr, value])
