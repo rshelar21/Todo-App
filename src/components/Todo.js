@@ -18,7 +18,9 @@ const Todo = () => {
             const dataRef =  collection(db, "todos")
             const q = query(dataRef, orderBy("timestamp"));
             const querySnapshot = await getDocs(q)
-            console.log(querySnapshot.docs)
+            // console.log(querySnapshot)
+            // console.log(querySnapshot.docs)
+
             setArr(querySnapshot.docs.map((doc) => ({...doc.data() , id: doc.id})))
         //     querySnapshot.forEach((doc) => {
         //     console.log(doc.data())
@@ -31,7 +33,7 @@ const Todo = () => {
 
         getData()
 
-    })
+    }, [arr])
 
     const setData = () => {
         // setArr([...arr, value])
@@ -45,7 +47,7 @@ const Todo = () => {
     }
 
    
-    console.log(arr)
+    // console.log(arr)
 
     const delList = async (data) => {
         await deleteDoc(doc(db, "todos", data))
@@ -61,7 +63,7 @@ const Todo = () => {
         <Input>
         <form >
         <input type="text" placeholder='enter todo'  value={value} onChange={(event) => setValue(event.target.value)}/>
-        <button type='submit' disabled={!value ? true : false} onClick={setData}>ADD</button>
+        <Btn type='submit' disabled={!value} onClick={setData}>ADD</Btn>
         </form>
         </Input>
 
@@ -126,7 +128,7 @@ input {
     height: 40px;
 }
 
-button {
+/* button {
     padding: 10px;
     border: none;
     outline: none;
@@ -136,7 +138,18 @@ button {
     background-color: ${(props) => (props.disabled ? "rgba(0,0,0,0.1)" : "#0a66c2")};
     border: 1px solid #fff;
 
-}
+} */
+`
+
+const Btn = styled.button`
+padding: 10px;
+    border: none;
+    outline: none;
+    border: 1px solid lightgray;
+    cursor: pointer;
+    color: ${(props) => (props.disabled ? "#000" : "#fff")};
+    background-color: ${props => props.disabled ? "rgba(0,0,0,0.1)" : "#0a66c2"};
+    border: 1px solid #fff;
 `
 
 
